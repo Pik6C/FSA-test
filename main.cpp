@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-enum State { q0, q1, q2, q3, q4, q5, q6 };
+enum State { q0, q1, q2, q3, q4, q5, q6};
 using namespace std;
 
 int FSX(string file, string filename, int in)
@@ -17,7 +17,6 @@ int FSX(string file, string filename, int in)
         switch (currentState) {
             case q0:
                 if (c == 'p'){ currentState = q1;}
-                else if (c == 'q'){ currentState = q6;}
                   else if (c == ' '){ currentState = q0;}
                 else {
                     cout << "\033[1;31m======Syntax Error======\033[m\n\n";
@@ -29,40 +28,18 @@ int FSX(string file, string filename, int in)
                 }
                 break;
             case q1:
-                if (c == 'r'){ currentState = q2;}
+                if (c == 'u'){ currentState = q2;}
                 else {
                     cout << "\033[1;31m======Syntax Error======\033[m\n\n";
                   cout << "\033[1;31mFile:\033[m " << filename << endl;
 
                   cout << "\033[1;31mLine:\033[m " << file << endl;
-                  cout <<" \033[1;31mError:\033[m Expected 'r' but got '" << c << "'" << endl;
+                  cout <<" \033[1;31mError:\033[m Expected 'u' but got '" << c << "'" << endl;
                     return 1;
                 }
                 break;
             case q2:
-                if (c == 'i'){ currentState = q3;}
-                else {
-                    cout << "\033[1;31m======Syntax Error======\033[m\n\n";
-                  cout << "\033[1;31mFile:\033[m " << filename << endl;
-
-                  cout << "\033[1;31mLine:\033[m " << file << endl;
-                  cout <<" \033[1;31mError:\033[m Expected 'i' but got '" << c << "'" << endl;
-                    return 1;
-                }
-                break;
-            case q3:
-                if (c == 'n'){ currentState = q4;}
-                else {
-                    cout << "\033[1;31m======Syntax Error======\033[m\n\n";
-                  cout << "\033[1;31mFile:\033[m " << filename << endl;
-
-                  cout << "\033[1;31mLine:\033[m " << file << endl;
-                  cout <<" \033[1;31mError:\033[m Expected 'n' but got '" << c << "'" << endl;
-                    return 1;
-                }
-                break;
-            case q4:
-                if (c == 't'){ currentState = q5;}
+                if (c == 't'){ currentState = q3;}
                 else {
                     cout << "\033[1;31m======Syntax Error======\033[m\n\n";
                   cout << "\033[1;31mFile:\033[m " << filename << endl;
@@ -72,12 +49,49 @@ int FSX(string file, string filename, int in)
                     return 1;
                 }
                 break;
-            case q6:
-                cout << "quit" << endl;
-                return 2;
+            case q3:
+                if (c == 's'){ currentState = q4;}
+                else {
+                    cout << "\033[1;31m======Syntax Error======\033[m\n\n";
+                  cout << "\033[1;31mFile:\033[m " << filename << endl;
+
+                  cout << "\033[1;31mLine:\033[m " << file << endl;
+                  cout <<" \033[1;31mError:\033[m Expected 's' but got '" << c << "'" << endl;
+                    return 1;
+                }
+                break;
+            case q4:
+                if (c == ' '){ currentState = q5;}
+                else {
+                    cout << "\033[1;31m======Syntax Error======\033[m\n\n";
+                  cout << "\033[1;31mFile:\033[m " << filename << endl;
+
+                  cout << "\033[1;31mLine:\033[m " << file << endl;
+                  cout <<" \033[1;31mError:\033[m unknown syntax :'" << c << "'" << endl;
+                    return 1;
+                }
+                break;
             case q5:
-          cout << "'print'" << endl; 
+              if(c == '"'){currentState = q6; cout << "q5" << endl;}
+              else { cout << "\033[1;31m======Syntax Error======\033[m\n\n";
+                cout << "\033[1;31mFile:\033[m " << filename << endl;
+
+                cout << "\033[1;31mLine:\033[m " << file << endl;
+                cout <<" \033[1;31mError:\033[m unknown syntax :'" << c << "'" << endl;
+                  return 1;
+              }
           break;
+          case q6:
+            cout << "q6" << endl;
+              string str;
+            if(c == '"'){
+              cout << str << endl;
+              return 0;
+            }else{
+              str.push_back(c);
+              cout << str << endl;
+              continue;
+            }
           return 0;
         }
     }
